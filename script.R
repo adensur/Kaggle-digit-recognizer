@@ -34,11 +34,33 @@ image(matr, col=grey(seq(1,0,length=256)))
 
 
 ##R kNN. [1] 0.9599524
-data<-read.csv("train.csv")
-data.train<-data[1:21000,2:785]
-data.test<- data[21001:42000,2:785]
-class<-as.factor(data[1:21000,1])
-kNN<-knn(data.train,data.test,cl=class)
-class.test<-as.factor(data[21001:42000,1])
+library(class)
+k=1        ##number of nearest neightbours
+K=1000      ##number of data points compared
+half<-K%/%2 ## index of the middle
+data<-read.csv("train.csv",nrow=K)
+data.train<-data[1:half,2:785]
+data.test<- data[(half+1):K,2:785]
+class<-as.factor(data[1:half,1])
+system.time(kNN<-knn(data.train,data.test,cl=class))
+
+class.test<-as.factor(data[(half+1):K,1])
 equal<-kNN==class.test
-sum(equal)/length(equal)
+result<-sum(equal)/length(equal)
+result
+
+
+##my KNN
+k=1        ##number of nearest neightbours
+K=42000     ##number of data points compared. max = 42000
+half<-K%/%2 ## index of the middle
+data<-read.csv("train.csv",nrow=K)
+train<-data[1:half,2:785]
+test<-data[(half+1):K,2:785]
+cl<-as.factor(data[1:half,1])
+mykNN<-myknn(train,test,cl,k)
+
+myclass.test<-as.factor(data[(half+1):K,1])
+myequal<-mykNN==myclass.test
+my.result<-sum(myequal)/length(myequal)
+my.result
