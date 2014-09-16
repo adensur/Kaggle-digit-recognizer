@@ -52,15 +52,25 @@ result
 
 ##my KNN
 k=1        ##number of nearest neightbours
-K=42000     ##number of data points compared. max = 42000
+K=1000     ##number of data points compared. max = 42000
 half<-K%/%2 ## index of the middle
 data<-read.csv("train.csv",nrow=K)
 train<-data[1:half,2:785]
 test<-data[(half+1):K,2:785]
 cl<-as.factor(data[1:half,1])
+##
 mykNN<-myknn(train,test,cl,k)
 
+##
+system.time(mykNN<-myknn(train,test,cl,k))
+system.time(mykNN2<-myknn2(train,test,cl,k))
+##
 myclass.test<-as.factor(data[(half+1):K,1])
 myequal<-mykNN==myclass.test
 my.result<-sum(myequal)/length(myequal)
 my.result
+##
+myequal2<-mykNN2==myclass.test
+my.result2<-sum(myequal2)/length(myequal2)
+my.result2
+
